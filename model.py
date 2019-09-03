@@ -11,11 +11,6 @@ class Wheel(object):
     def rotate(self,revolutions):
         self.orientation = (self.orientation + (revolutions * 360))%360
 
-#Hjul=Wheel()
-#print(Hjul.orientation)
-#Hjul.rotate(2.5)
-#print(Hjul.orientation)
-
 class Engine(object):
     pass
 
@@ -29,21 +24,18 @@ class Gearbox(object):
         self.gears = [0, 0.8, 1, 1.4, 2.2, 3.8] #list
 
     def shiftUp(self):
-        if self.clutchEngaged == True and self.currentGear < len(self.gears)-1:
-            self.currentGear = self.currentGear + 1
+        if self.currentGear < len(self.gears)-1 and not self.clutchEngaged:
+            self.currentGear += 1
 
-    def ShiftDown(self):
-        if clutchEngaged == True and currentGear < 0:
-            self.currentGear = self.currentGear - 1
-
-    #def rotate
+    def shiftDown(self):
+        if self.currentGear > 0 and not self.clutchEngaged:
+            self.currentGear -= 1
 
 
-
-
-#g=Gearbox()
-#for Wheel in g.wheels:
-#    print(g.wheels[Wheel].orientation)
+    def rotate(self,revolutions):
+        if self.clutchEngaged == True:
+            for wheel in self.wheels:
+                self.wheels[wheel].rotate(revolutions * self.gears[self.currentGear])
 
 class Tank(object):
 
@@ -58,8 +50,3 @@ class Tank(object):
         self.contents = self.contents - amount
         if self.contents < 0:
             self.contents = 0
-
-
-#tank=Tank()
-#tank.remove(99)
-#print(tank.contents)
