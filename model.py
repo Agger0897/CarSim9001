@@ -12,7 +12,26 @@ class Wheel(object):
         self.orientation = (self.orientation + (revolutions * 360))%360
 
 class Engine(object):
-    pass
+
+    def __init__(self):
+        self.throttlePosition = 0
+        self.theGearbox = Gearbox()
+        self.currentRpm = 0
+        self.maxRpm = 100
+        self.consumptionConstant = 0.0025
+        self.theTank = Tank()
+
+    def updateModel(self,dt):
+        if self.theTank.contents > 0:
+            self.currentRpm = self.throttlePosition * self.maxRpm
+            self.theTank.remove(self.currentRpm * self.consumptionConstant)
+            self.theGearbox.rotate(self.currentRpm*(dt/60))
+
+        elif self.theTank.contents <= 0:
+            self.currentRpm = 0
+            self.theGearbox.rotate(self.currentRpm*(dt/60))
+
+
 
 
 class Gearbox(object):
@@ -50,3 +69,6 @@ class Tank(object):
         self.contents = self.contents - amount
         if self.contents < 0:
             self.contents = 0
+
+# g=Tank()
+# print(g.contents)
